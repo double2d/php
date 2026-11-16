@@ -1,58 +1,53 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Đồ Án Nhóm: Website Bán Sách (Laravel)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 1. Phân công công việc nhóm (3 thành viên)
+1. **Thành viên 1:** Thiết kế & khởi tạo toàn bộ Cơ sở dữ liệu (Migrations, Models, Relationships, Factories, Seeders) + Phân hệ Quản lý Nhà cung cấp sách & Nhập kho (`/admin/suppliers`).
+2. **Thành viên 2:** Giao diện và chức năng của Admin (Quản lý Danh mục, Sách, Đơn hàng, Người dùng, Đánh giá) + Slide PPT.
+3. **Thành viên 3:** Giao diện và chức năng của User/Khách hàng (Trang chủ, Chi tiết sách, Giỏ hàng, Đặt hàng, Đánh giá sao, Hồ sơ cá nhân) + Báo cáo Word.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## 2. Hướng dẫn cài đặt cho các thành viên trong nhóm
 
 ```bash
-composer require laravel/boost --dev
+# 1. Clone dự án về máy
+git clone https://github.com/double2d/duan.git
+cd duan
 
-php artisan boost:install
+# 2. Cài đặt thư viện PHP
+composer install
+
+# 3. Tạo file môi trường và khóa ứng dụng
+cp .env.example .env
+php artisan key:generate
+
+# 4. Tạo file SQLite (hoặc cấu hình MySQL trong .env) và chạy Migration + Seeder
+touch database/database.sqlite
+php artisan migrate:fresh --seed
+
+# 5. Chạy server
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 3. Tài khoản đăng nhập mẫu (Đã tạo sẵn qua Seeder)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Vai trò | Email | Mật khẩu |
+| :--- | :--- | :--- |
+| **Quản trị viên (Admin)** | `admin@bookstore.vn` | `password123` |
+| **Khách hàng 1 (User)** | `user@bookstore.vn` | `password123` |
+| **Khách hàng 2 (User)** | `minhanh@gmail.com` | `password123` |
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 4. Cấu trúc 12 Bảng Database đã khởi tạo sẵn
+- `users`: Tài khoản Admin & Khách hàng (`is_admin`, `is_active`, `phone`, `address`, `avatar`)
+- `suppliers`: Nhà cung cấp / Nhà xuất bản sách
+- `categories`: Thể loại sách
+- `books`: Sách (`supplier_id`, `category_id`, `title`, `slug`, `author`, `isbn`, `cover_image`, `price`, `sale_price`, `stock_quantity`, `pages`, `published_year`, `is_featured`, `is_active`)
+- `tags` & `book_tag`: Nhãn sách (Quan hệ N-N)
+- `import_receipts` & `import_receipt_details`: Phiếu nhập kho sách từ Nhà cung cấp
+- `carts` & `cart_items`: Giỏ hàng của khách hàng
+- `orders` & `order_items`: Đơn đặt hàng & Chi tiết đơn hàng
+- `reviews`: Đánh giá & Bình luận sách (1–5 sao)
