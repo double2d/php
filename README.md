@@ -21,8 +21,8 @@ composer install
 cp .env.example .env
 php artisan key:generate
 
-# 4. Tạo file SQLite (hoặc cấu hình MySQL trong .env) và chạy Migration + Seeder
-touch database/database.sqlite
+# 4. Tạo database MySQL tên là `bookstore` (hoặc import file `database/bookstore.sql`) và chạy Migration + Seeder
+mysql -u root -e "CREATE DATABASE IF NOT EXISTS bookstore CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 php artisan migrate:fresh --seed
 
 # 5. Chạy server
